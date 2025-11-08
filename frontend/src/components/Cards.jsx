@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { UserContext } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"
 import { cardStyles } from "../assets/dummystyle"
-import { Check, Clock, Edit, Trash2, Zap } from "lucide-react"
+import { Award, Check, Clock, Edit, Trash2, Zap ,TrendingUp} from "lucide-react"
 //PROFILE INFO CARD
 import { useState } from "react"
 export const ProfileInfoCard=()=>{
