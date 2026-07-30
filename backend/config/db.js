@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const connectDB = async () => {
-    await mongoose.connect("mongodb+srv://uddinboka_db_user:resume123@cluster0.7swiges.mongodb.net/Resume")
-    .then(() => console.log("✅ MongoDB Connected"))
-}
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB Connected");
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:", error.message);
+    process.exit(1);
+  }
+};
+
+//RE project name;

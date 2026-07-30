@@ -14,7 +14,7 @@ const app = express();
 const PORT=4000
 
 app.use(cors({
-  origin: 'https://resume-builder-frontend1.onrender.com',
+  origin: 'http://localhost:5173',
   credentials: true,
 }));
 connectDB();
@@ -27,7 +27,7 @@ app.use(
     '/uploads',
     express.static(path.join(__dirname,'uploads'),{
         setHeaders:(res,_path)=>{
-            res.set('Access-Control-Allow-Origin','https://resume-builder-frontend1.onrender.com')
+            res.set('Access-Control-Allow-Origin','http://localhost:5173')
         }
     })
 )
