@@ -38,8 +38,7 @@ const TemplateTwo = ({ resumeData = {}, containerWidth }) => {
         transform: containerWidth > 0 ? `scale(${scale})` : undefined,
         transformOrigin: "top left",
         width: containerWidth > 0 ? `${baseWidth}px` : undefined,
-        height: "1123px",
-        overflow: "hidden",
+        minHeight: "1123px",
       }}
     >
       {/* Header Section */}

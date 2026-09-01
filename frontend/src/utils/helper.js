@@ -141,47 +141,28 @@ export const fixTailwindColors = (rootElement) => {
 export async function captureElementAsImage(element) {
   if (!element) throw new Error("No element provided");
 
-  // 1) Clone & position off-screen (opacity:0 so it's still “visible” to html2canvas)
   const clone = element.cloneNode(true);
   clone.style.position = "absolute";
   clone.style.top      = "-9999px";
   clone.style.left     = "0";
-  clone.style.opacity  = "0";
+  clone.style.opacity  = "1";
   const { width, height } = element.getBoundingClientRect();
-  clone.style.width  = `${width}px`;
-  clone.style.height = `${height}px`;
+  if (width > 0) clone.style.width = `${width}px`;
+  if (height > 0) clone.style.height = `${height}px`;
   document.body.appendChild(clone);
 
-  // 2) Inject a global override into the real <head>
-  //    This will force ALL elements—including Tailwind’s oklch colors—
-  //    to render with black text, white backgrounds, no box-shadows,
-  //    and no background-images.
-  const override = document.createElement("style");
-  override.id = "__html2canvas_override__";
-  override.textContent = `
-    * {
-      color: #000 !important;
-      background-color: #fff !important;
-      border-color: #000 !important;
-      box-shadow: none !important;
-      background-image: none !important;
-    }
-  `;
-  document.head.appendChild(override);
-
   try {
-    // 3) Now html2canvas will only see “safe” colors & no shadows
     const canvas = await html2canvas(clone, {
-      scale: 3,
+      scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: "#FFFFFF",
     });
     return canvas.toDataURL("image/png");
   } finally {
-    // 4) Tear down both the clone and our override stylesheet
-    document.body.removeChild(clone);
-    document.head.removeChild(override);
+    if (document.body.contains(clone)) {
+      document.body.removeChild(clone);
+    }
   }
 }
 

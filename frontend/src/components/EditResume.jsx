@@ -654,43 +654,30 @@ const EditResume = () => {
 
     setIsDownloading(true);
     setDownloadSuccess(false);
-    const toastId = toast.loading("Generating PDFâ€¦");
-
-    const override = document.createElement("style");
-    override.id = "__pdf_color_override__";
-    override.textContent = `
-      * {
-        color: #000 !important;
-        background-color: #fff !important;
-        border-color: #000 !important;
-      }
-    `;
-    document.head.appendChild(override);
+    const toastId = toast.loading("Generating PDF...");
 
     try {
-      await html2pdf()
-        .set({
-          margin: 0,
-          filename: `${resumeData.title.replace(/[^a-z0-9]/gi, "_")}.pdf`,
-          image: { type: "png", quality: 1.0 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: "#FFFFFF",
-            logging: false,
-            windowWidth: element.scrollWidth,
-          },
-          jsPDF: {
-            unit: "mm",
-            format: "a4",
-            orientation: "portrait",
-          },
-          pagebreak: {
-            mode: ["avoid-all", "css", "legacy"],
-          },
-        })
-        .from(element)
-        .save();
+      const opt = {
+        margin: 0,
+        filename: `${(resumeData.title || "resume").replace(/[^a-z0-9]/gi, "_")}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#FFFFFF",
+          logging: false,
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "portrait",
+        },
+        pagebreak: {
+          mode: ["avoid-all", "css", "legacy"],
+        },
+      };
+
+      await html2pdf().set(opt).from(element).save();
 
       toast.success("PDF downloaded successfully!", { id: toastId });
       setDownloadSuccess(true);
@@ -699,7 +686,6 @@ const EditResume = () => {
       console.error("PDF error:", err);
       toast.error(`Failed to generate PDF: ${err.message}`, { id: toastId });
     } finally {
-      document.getElementById("__pdf_color_override__")?.remove();
       setIsDownloading(false);
     }
   };
@@ -838,7 +824,7 @@ const EditResume = () => {
       {/* Modal data here */}
       <Modal isOpen={openThemeSelector}
       onClose={()=>setOpenThemeSelector(false)}
-      title="Change Title">
+      title="Choose Resume Template">
         <div className={containerStyles.modalContent}>
           <ThemeSector selectedTheme={resumeData?.template.theme}
           setSelectedTheme={updateTheme}

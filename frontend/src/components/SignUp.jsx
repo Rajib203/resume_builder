@@ -77,7 +77,7 @@ const SignUp = ({setCurrentPage}) => {
             {/* Footer */}
             <p className={styles.switchText}>
                 Already have an account?{' '}
-                <button className={styles.signupSwitchButton} type="submit" onClick={()=>setCurrentPage('login')}>
+                <button className={styles.signupSwitchButton} type="button" onClick={()=>setCurrentPage('login')}>
                     Sign In
                 </button>
             </p>

@@ -105,7 +105,7 @@ export const getUserResumes =async(req,res)=>{
         const resumes= await Resume.find({userId:req.user._id}).sort({
             createdAt:-1
         })
-        res.status(201).json(resumes)
+        res.status(200).json(resumes)
     } catch (error) {
         res.status(500).json({ message: "Resume not get", error: error.message });
 
@@ -117,7 +117,7 @@ export const getResumeById=async(req,res)=>{
         const resume=await Resume.findOne({_id:req.params.id,userId:req.user._id})
         if(!resume)
         {
-            return res.status(400).json({message:"Resume not found"})
+            return res.status(404).json({message:"Resume not found"})
         }
         res.status(200).json(resume)
     } catch (error) {
@@ -155,7 +155,7 @@ export const deleteResume=async(req,res)=>{
     })
     if(!resume)
     {
-      return res.status(500).json({message:"Failed to load Resume"})
+      return res.status(404).json({message:"Resume not found"})
     }
     const uploadsFolder=path.join(process.cwd(),"uploads")
 
